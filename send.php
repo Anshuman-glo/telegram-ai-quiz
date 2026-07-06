@@ -257,50 +257,40 @@ if (!isset($GEMINI_API_KEY) || trim((string)$GEMINI_API_KEY) === '') {
  * Step 2: Build the Gemini prompt.
  * ---------------------------------------------------------------------
  */
-if ($SUBJECT === 'Bengali') {
-    // Bengali-specific prompt: question and options must be generated
-    // in Bengali (Unicode), per the standard WBCHSE Bengali syllabus.
-    // JSON format/keys remain unchanged (in English).
-    $prompt = <<<PROMPT
-You are a question generator for WBCHSE (West Bengal Council of Higher Secondary Education) Class 12 board exam preparation.
+--------------------------------------------------------------------
+ 
+ * ---------------------------------------------------------------------
+ */
+$prompt = <<<PROMPT
+আপনি WBCHSE (West Bengal Council of Higher Secondary Education) দ্বাদশ শ্রেণির বোর্ড পরীক্ষার জন্য একটি MCQ প্রশ্ন প্রস্তুতকারী।
 
-Generate ONE random multiple-choice question (MCQ) for the subject: Bengali (বাংলা), strictly based on the standard WBCHSE Class 12 Bengali syllabus.
+বিষয়: {$SUBJECT}
 
-Rules:
-- The question text AND all options MUST be written in Bengali, using proper Unicode Bengali script (বাংলা লিপি). Do not use English or transliteration.
-- Provide exactly 4 options, all in Bengali.
-- Only one option must be correct.
-- The question text must be under 290 characters.
-- Each option must be under 95 characters.
-- Do NOT include explanations, extra text, markdown formatting, or code fences.
-- The JSON keys themselves ("question", "options", "correct") must remain in English exactly as shown below, but their values (the question text and options) must be in Bengali.
-- Return ONLY a single valid JSON object, with no surrounding text, in EXACTLY this format:
+নির্দেশাবলী:
+- প্রশ্নটি অবশ্যই WBCHSE দ্বাদশ শ্রেণির {$SUBJECT} বিষয়ের বর্তমান পাঠ্যক্রমের উপর ভিত্তি করে হতে হবে।
+- প্রশ্ন, চারটি বিকল্প এবং সকল লেখা অবশ্যই বিশুদ্ধ বাংলা (ইউনিকোড বাংলা লিপি) ভাষায় লিখতে হবে।
+- বাংলা ভাষা ছাড়া অন্য কোনো ভাষা, রোমান বাংলা বা Transliteration ব্যবহার করা যাবে না, তবে পাঠ্যক্রম অনুযায়ী প্রয়োজনীয় গাণিতিক সূত্র, রাসায়নিক সংকেত, পদার্থবিজ্ঞানের প্রতীক, জৈববিজ্ঞানের বৈজ্ঞানিক নাম বা আন্তর্জাতিকভাবে প্রচলিত পরিভাষা ব্যবহার করা যাবে।
+- মোট ৪টি বিকল্প দিতে হবে।
+- শুধুমাত্র একটি বিকল্প সঠিক হবে।
+- প্রশ্নের দৈর্ঘ্য ২৯০ অক্ষরের কম হতে হবে।
+- প্রতিটি বিকল্পের দৈর্ঘ্য ৯৫ অক্ষরের কম হতে হবে।
+- কোনো ব্যাখ্যা, অতিরিক্ত লেখা, Markdown, Code Fence বা অন্য কোনো অতিরিক্ত টেক্সট যোগ করা যাবে না।
+- শুধুমাত্র একটি বৈধ JSON Object ফেরত দিতে হবে।
+- JSON-এর Key অবশ্যই "question", "options" এবং "correct" হবে এবং এগুলো ইংরেজিতেই থাকবে।
+- JSON-এর Value (প্রশ্ন ও বিকল্প) সম্পূর্ণ বাংলায় হবে।
+- প্রশ্নটি যেন প্রতিবার ভিন্ন অধ্যায়, ভিন্ন ধারণা বা ভিন্ন তথ্য থেকে এলোমেলোভাবে তৈরি হয়।
+- আগের প্রশ্ন পুনরাবৃত্তি না করার চেষ্টা করতে হবে।
 
-{"question":"...","options":["...","...","...","..."],"correct":0}
-
-Where "correct" is the zero-based index (0, 1, 2, or 3) of the correct option in the "options" array.
-PROMPT;
-} else {
-    $prompt = <<<PROMPT
-You are a question generator for WBCHSE (West Bengal Council of Higher Secondary Education) Class 12 board exam preparation.
-
-Generate ONE random multiple-choice question (MCQ) for the subject: {$SUBJECT}.
-
-Rules:
-- The question must be strictly based on the WBCHSE Class 12 {$SUBJECT} syllabus.
-- Provide exactly 4 options.
-- Only one option must be correct.
-- The question text must be under 290 characters.
-- Each option must be under 95 characters.
-- Do NOT include explanations, extra text, markdown formatting, or code fences.
-- Return ONLY a single valid JSON object, with no surrounding text, in EXACTLY this format:
+শুধুমাত্র নিচের ফরম্যাটে উত্তর দিন:
 
 {"question":"...","options":["...","...","...","..."],"correct":0}
 
-Where "correct" is the zero-based index (0, 1, 2, or 3) of the correct option in the "options" array.
+এখানে "correct" হবে সঠিক উত্তরের শূন্য-ভিত্তিক সূচক (0, 1, 2 অথবা 3)।
 PROMPT;
-}
-
+/**
+ * ---------------------------------------------------------------------
+ * Step 3: Call the Gemini 2.5 Flash API.
+ * -----
 /**
  * ---------------------------------------------------------------------
  * Step 3: Call the Gemini 2.5 Flash API.
