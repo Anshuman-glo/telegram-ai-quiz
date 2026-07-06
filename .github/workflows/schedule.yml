@@ -18,4 +18,4 @@ jobs:
                --connect-timeout 30 \
                --max-time 180 \
                --user-agent "Mozilla/5.0" \
-               "https://brni.great-site.net/send.php"
+               "https://telegram-ai-quiz-eqay.onrender.com/send.php"
