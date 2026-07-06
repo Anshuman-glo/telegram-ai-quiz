@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 
-$BOT_TOKEN = "8974526101:AAHm32lOYJ3gyf9gNz_wOZAeq2fBgITN2AU";
-$CHANNEL_ID = "@sparkmme";
+$BOT_TOKEN = getenv('BOT_TOKEN');
+$CHANNEL_ID = getenv('CHANNEL_ID');
+$GEMINI_API_KEY = getenv('GEMINI_API_KEY');
 
-$GEMINI_API_KEY = "AIzaSyD9DjwTnPmY89QpJuJr9Ehk0kLuZO84iC0";
-
-?>
+if (!$BOT_TOKEN || !$CHANNEL_ID || !$GEMINI_API_KEY) {
+    die("Missing required environment variables.");
+}
