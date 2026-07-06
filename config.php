@@ -1,0 +1,8 @@
+<?php
+
+$BOT_TOKEN = "8974526101:AAHm32lOYJ3gyf9gNz_wOZAeq2fBgITN2AU";
+$CHANNEL_ID = "@sparkmme";
+
+$GEMINI_API_KEY = "AIzaSyD9DjwTnPmY89QpJuJr9Ehk0kLuZO84iC0";
+
+?>
